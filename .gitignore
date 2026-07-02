@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+coverage/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Vite
+vite.config.ts.timestamp-*
+*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# Testing
+coverage/
+
+# Docker
+.docker/
+
+# Uploads/temp files
+uploads/
+temp/
+tmp/
+
+# Prisma (if you add later)
+prisma/dev.db
+prisma/dev.db-journal
+
+# Cache
+.cache/
+.eslintcache
+
+# Package manager lock files
+# Uncomment the one you DON'T use
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
