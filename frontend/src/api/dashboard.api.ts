@@ -1,3 +1,4 @@
+import type { DashboardLayout } from "../store/dashboardSlice";
 import { apiClient } from "./client";
 
 export const dashboardApi = {
@@ -7,5 +8,10 @@ export const dashboardApi = {
 
   getDashboard() {
     return apiClient.get("/dashboards");
+  },
+  updateLayout(id: string, layouts: DashboardLayout[]) {
+    return apiClient.put(`/dashboards/${id}/layout`, {
+      layouts,
+    });
   },
 };

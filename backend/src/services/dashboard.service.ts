@@ -15,4 +15,16 @@ export class DashboardService {
   static async updateDashboard(id: string, payload: any) {
     return Dashboard.findByIdAndUpdate(id, payload, { new: true });
   }
+  
+  static async updateLayout(id: string, layouts: any[]) {
+    return Dashboard.findByIdAndUpdate(
+      id,
+      {
+        layouts,
+      },
+      {
+        new: true,
+      },
+    );
+  }
 }

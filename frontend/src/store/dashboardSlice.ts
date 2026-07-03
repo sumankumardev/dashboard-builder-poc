@@ -19,6 +19,7 @@ export interface DashboardWidget {
 }
 
 interface DashboardState {
+  dashboardId?: string;
   widgets: DashboardWidget[];
   layouts: DashboardLayout[];
   columns: number;
@@ -45,6 +46,7 @@ const dashboardSlice = createSlice({
     setDashboard(
       state,
       action: PayloadAction<{
+        dashboardId: string;
         widgets: DashboardWidget[];
         layouts: DashboardLayout[];
         columns?: number;

@@ -15,8 +15,6 @@ export interface Layout {
 export interface Dashboard {
   _id: string;
 
-  name: string;
-
   description: string;
 
   widgets: Widget[];
