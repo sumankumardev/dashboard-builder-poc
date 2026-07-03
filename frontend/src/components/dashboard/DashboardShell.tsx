@@ -25,7 +25,6 @@ export default function DashboardShell() {
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;
-  if (layouts.length === 0) return <div>Loading...</div>;
 
   return <DashboardGrid />;
 }

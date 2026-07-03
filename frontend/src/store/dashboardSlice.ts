@@ -64,6 +64,11 @@ const dashboardSlice = createSlice({
       state.layouts = action.payload;
     },
 
+    updateWidget(state, action: PayloadAction<DashboardWidget>) {
+      const idx = state.widgets.findIndex((w) => w.widgetId === action.payload.widgetId);
+      if (idx !== -1) state.widgets[idx] = action.payload;
+    },
+
     addWidget(state, action: PayloadAction<DashboardWidget>) {
       state.widgets.push(action.payload);
       state.layouts.push(action.payload as unknown as DashboardLayout);
@@ -86,16 +91,25 @@ const dashboardSlice = createSlice({
     toggleEditMode(state) {
       state.editMode = !state.editMode;
     },
+
+    resetDashboard(state) {
+      state.dashboardId = null;
+      state.widgets = [];
+      state.layouts = [];
+    },
   },
+  
 });
 
 export const {
   setDashboard,
   updateLayouts,
+  updateWidget,
   addWidget,
   removeWidget,
   selectWidget,
   toggleEditMode,
+  resetDashboard,
 } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

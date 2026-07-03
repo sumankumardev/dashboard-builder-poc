@@ -141,12 +141,45 @@ export class DashboardController {
           .status(400)
           .json({ message: "Widget data must have type, title and layout" });
       }
-      const dashboard = await DashboardService.addWidgetToDashboard(
+      const result = await DashboardService.addWidgetToDashboard(
         dashboardId,
         widgetData,
       );
+      res.json(result);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+
+  static async updateWidget(req: Request, res: Response) {
+    try {
+      const dashboardId = req.params["dashboardId"] as string;
+      const widgetId = req.params["widgetId"] as string;
+      const widget = await DashboardService.updateWidgetInDashboard(
+        dashboardId,
+        widgetId,
+        req.body,
+      );
+      if (!widget) return res.status(404).json({ message: "Not found" });
+      res.json(widget);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+
+  static async duplicateWidget(req: Request, res: Response) {
+    try {
+      console.log(req.params);
+      const dashboardId = req.params["dashboardId"] as string;
+      const widgetId = req.params["widgetId"] as string;
+      const dashboard = await DashboardService.duplicateWidgetInDashboard(
+        dashboardId,
+        widgetId,
+      );
+      if (!dashboard) return res.status(404).json({ message: "Not found" });
       res.json(dashboard);
     } catch (error) {
+      console.error(error);
       res.status(500).json(error);
     }
   }
