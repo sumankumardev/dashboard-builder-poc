@@ -69,9 +69,14 @@ const dashboardSlice = createSlice({
       if (idx !== -1) state.widgets[idx] = action.payload;
     },
 
-    addWidget(state, action: PayloadAction<DashboardWidget>) {
-      state.widgets.push(action.payload);
-      state.layouts.push(action.payload as unknown as DashboardLayout);
+    addWidget(state, action: PayloadAction<DashboardWidget & { layoutEntry?: DashboardLayout }>) {
+      const { layoutEntry, ...widget } = action.payload as any;
+      state.widgets.push(widget);
+      if (layoutEntry) {
+        state.layouts.push(layoutEntry);
+      } else {
+        state.layouts.push({ i: widget.widgetId, x: 0, y: Infinity, w: 6, h: 8 });
+      }
     },
 
     removeWidget(state, action: PayloadAction<string>) {

@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { addWidget, setDashboard, resetDashboard } from "../../store/dashboardSlice";
+import { addWidget, setDashboard, resetDashboard, type DashboardLayout } from "../../store/dashboardSlice";
 import { dashboardApi } from "../../api/dashboard.api";
 import { store } from "../../store/store";
 import { useQueryClient } from "@tanstack/react-query";
@@ -58,7 +58,7 @@ export default function DashboardToolbar() {
         layout,
       });
       const { widget } = result.data;
-      const newLayout = { i: widget.widgetId, x: 0, y: Infinity, w: 6, h: 8 };
+      const newLayout: DashboardLayout = { i: widget.widgetId, x: 0, y: Infinity, w: 6, h: 8 };
       dispatch(addWidget({
         _id: widget._id,
         widgetId: widget.widgetId,
@@ -66,9 +66,10 @@ export default function DashboardToolbar() {
         type: widget.type,
         dataSource: widget.dataSource,
         config: widget.config,
-      }));
-      // persist updated layouts including the new widget
-      const updatedLayouts = [...store.getState().dashboard.layouts, newLayout];
+        layoutEntry: newLayout,
+      } as any));
+      // read layouts after dispatch so the new entry is included
+      const updatedLayouts = store.getState().dashboard.layouts;
       await dashboardApi.updateLayout(dashboardId, updatedLayouts);
       setWidgetDialog({ open: false, type: null });
     } finally {

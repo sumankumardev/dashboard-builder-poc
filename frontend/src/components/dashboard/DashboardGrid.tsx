@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { ResponsiveGridLayout, useContainerWidth } from "react-grid-layout";
-import type { Layout, EventCallback, ResponsiveLayouts } from "react-grid-layout";
+import type { Layout, EventCallback } from "react-grid-layout";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { updateLayouts, type DashboardLayout } from "../../store/dashboardSlice";
@@ -18,11 +17,10 @@ export default function DashboardGrid() {
   const rowHeight = useAppSelector((state) => state.dashboard.rowHeight);
   const dashboardId = useAppSelector((state) => state.dashboard.dashboardId);
 
-  const [initialLayouts] = useState<ResponsiveLayouts>(() => {
-    if (layouts.length === 0) return {};
-    const l = layouts as unknown as Layout;
-    return { lg: l, md: l, sm: l, xs: l, xxs: l };
-  });
+  // Always derive from Redux — never freeze in useState
+  const responsiveLayouts = layouts.length > 0
+    ? { lg: layouts as unknown as Layout[], md: layouts as unknown as Layout[], sm: layouts as unknown as Layout[], xs: layouts as unknown as Layout[], xxs: layouts as unknown as Layout[] }
+    : {};
 
   const saveLayout: EventCallback = (layout) => {
     const mutable = (layout as unknown as DashboardLayout[]).map(({ i, x, y, w, h }) => ({ i, x, y, w, h }));
@@ -39,7 +37,7 @@ export default function DashboardGrid() {
       <ResponsiveGridLayout
         className="layout"
         width={width}
-        layouts={initialLayouts}
+        layouts={responsiveLayouts as Partial<Record<'lg' | 'md' | 'sm' | 'xs' | 'xxs', Layout>>}
         breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
         cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
         rowHeight={rowHeight}
