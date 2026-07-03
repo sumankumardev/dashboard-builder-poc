@@ -1,5 +1,5 @@
 import { dashboardApi } from "@/api/dashboard.api";
-import type { Widget } from "@/types/widget";
+// import type { Widget } from "@/types/widget";
 import { useQuery } from "@tanstack/react-query";
 
 
