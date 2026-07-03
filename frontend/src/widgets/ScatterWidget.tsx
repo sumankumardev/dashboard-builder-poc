@@ -1,40 +1,19 @@
 import ReactECharts from "echarts-for-react";
 import { useScatterWidget } from "../hooks/useWidgets";
 
-export default function ScatterWidget() {
-  const {
-    data,
-    isLoading,
-    error,
-  } = useScatterWidget();
+interface Props { widget: { widgetId: string } }
 
-  if (isLoading)
-    return <div>Loading...</div>;
+export default function ScatterWidget({ widget }: Props) {
+  const { data, isLoading, error } = useScatterWidget(widget.widgetId);
 
-  if (error)
-    return <div>Error</div>;
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error</div>;
 
   const option = {
     xAxis: {},
-
     yAxis: {},
-
-    series: [
-      {
-        type: "scatter",
-
-        data: data.data,
-      },
-    ],
+    series: [{ type: "scatter", data: data.data }],
   };
 
-  return (
-    <ReactECharts
-      option={option}
-      style={{
-        height: "100%",
-        width: "100%",
-      }}
-    />
-  );
+  return <ReactECharts option={option} style={{ height: "100%", width: "100%" }} />;
 }

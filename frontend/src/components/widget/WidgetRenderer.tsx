@@ -13,6 +13,16 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -35,6 +45,7 @@ export default function WidgetRenderer({ widget }: { widget: Widget }) {
 
   const [editOpen, setEditOpen] = useState(false);
   const [editTitle, setEditTitle] = useState(widget.title);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const Component = widgetRegistry[widget.type] as ComponentType<{ widget: Widget }>;
   if (!Component) return <div>Unknown Widget</div>;
@@ -54,7 +65,7 @@ export default function WidgetRenderer({ widget }: { widget: Widget }) {
   };
 
   const handleRefresh = () => {
-    queryClient.invalidateQueries({ queryKey: ["widget", widget.type] });
+    queryClient.invalidateQueries({ queryKey: ["widget", widget.type, widget.widgetId] });
   };
 
   const handleEditSave = async () => {
@@ -75,11 +86,12 @@ export default function WidgetRenderer({ widget }: { widget: Widget }) {
         onEdit={() => { setEditTitle(widget.title); setEditOpen(true); }}
         onDuplicate={handleDuplicate}
         onRefresh={handleRefresh}
-        onDelete={handleDelete}
+        onDelete={() => setDeleteOpen(true)}
       >
         <Component widget={widget} />
       </WidgetCard>
 
+      {/* Edit Dialog */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent>
           <DialogHeader>
@@ -91,13 +103,34 @@ export default function WidgetRenderer({ widget }: { widget: Widget }) {
               id="widget-title"
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleEditSave()}
+              autoFocus
             />
           </div>
           <DialogFooter>
-            <Button onClick={handleEditSave}>Save</Button>
+            <Button variant="outline" onClick={() => setEditOpen(false)}>Cancel</Button>
+            <Button onClick={handleEditSave} disabled={!editTitle.trim()}>Save</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Delete Confirmation */}
+      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete "{widget.title}"?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently remove the widget from the dashboard. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={handleDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

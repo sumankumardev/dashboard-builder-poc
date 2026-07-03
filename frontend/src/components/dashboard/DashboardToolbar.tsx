@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { addWidget, setDashboard, resetDashboard } from "../../store/dashboardSlice";
 import { dashboardApi } from "../../api/dashboard.api";
+import { store } from "../../store/store";
 import { useQueryClient } from "@tanstack/react-query";
 
 type WidgetType = "bar" | "line" | "treemap" | "scatter";
@@ -49,14 +50,15 @@ export default function DashboardToolbar() {
     setWidgetLoading(true);
     try {
       const layout = { i: "", x: 0, y: Infinity, w: 6, h: 8 };
-      const res = await dashboardApi.addWidget(dashboardId, {
+      const result = await dashboardApi.addWidget(dashboardId, {
         type: widgetDialog.type,
         title: widgetTitle,
         dataSource: `/api/widgets/${widgetDialog.type}`,
         config: {},
         layout,
       });
-      const { widget } = res.data;
+      const { widget } = result.data;
+      const newLayout = { i: widget.widgetId, x: 0, y: Infinity, w: 6, h: 8 };
       dispatch(addWidget({
         _id: widget._id,
         widgetId: widget.widgetId,
@@ -65,6 +67,9 @@ export default function DashboardToolbar() {
         dataSource: widget.dataSource,
         config: widget.config,
       }));
+      // persist updated layouts including the new widget
+      const updatedLayouts = [...store.getState().dashboard.layouts, newLayout];
+      await dashboardApi.updateLayout(dashboardId, updatedLayouts);
       setWidgetDialog({ open: false, type: null });
     } finally {
       setWidgetLoading(false);
@@ -86,6 +91,7 @@ export default function DashboardToolbar() {
         rowHeight: d.settings?.rowHeight,
       }));
       queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboards"] });
       setLayoutDialog(false);
       setLayoutName("");
     } finally {

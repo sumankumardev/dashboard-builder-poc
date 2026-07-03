@@ -5,6 +5,9 @@ export const dashboardApi = {
   getDashboard() {
     return apiClient.get("/dashboards");
   },
+  getDashboardById(id: string) {
+    return apiClient.get(`/dashboards/${id}`);
+  },
   updateLayout(id: string, layouts: DashboardLayout[]) {
     return apiClient.put(`/dashboards/${id}/layout`, { layouts });
   },

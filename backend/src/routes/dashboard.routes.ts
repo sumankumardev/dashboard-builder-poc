@@ -5,6 +5,7 @@ const router = Router();
 
 router.get("/", DashboardController.getAll);
 router.post("/", DashboardController.create);
+router.get("/:id", DashboardController.getById);
 router.put("/:id/layout", DashboardController.updateLayout);
 
 router.post("/:dashboardId/widgets", DashboardController.addWidget);

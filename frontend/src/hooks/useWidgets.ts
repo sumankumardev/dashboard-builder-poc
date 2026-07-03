@@ -1,27 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
-
 import { widgetApi } from "../api/widget.api";
 
-export const useBarWidget = () =>
+export const useBarWidget = (widgetId: string) =>
   useQuery({
-    queryKey: ["widget", "bar"],
+    queryKey: ["widget", "bar", widgetId],
     queryFn: async () => (await widgetApi.getBar()).data,
   });
 
-export const useLineWidget = () =>
+export const useLineWidget = (widgetId: string) =>
   useQuery({
-    queryKey: ["widget", "line"],
+    queryKey: ["widget", "line", widgetId],
     queryFn: async () => (await widgetApi.getLine()).data,
   });
 
-export const useTreeMapWidget = () =>
+export const useTreeMapWidget = (widgetId: string) =>
   useQuery({
-    queryKey: ["widget", "treemap"],
+    queryKey: ["widget", "treemap", widgetId],
     queryFn: async () => (await widgetApi.getTreeMap()).data,
   });
 
-export const useScatterWidget = () =>
+export const useScatterWidget = (widgetId: string) =>
   useQuery({
-    queryKey: ["widget", "scatter"],
+    queryKey: ["widget", "scatter", widgetId],
     queryFn: async () => (await widgetApi.getScatter()).data,
   });
