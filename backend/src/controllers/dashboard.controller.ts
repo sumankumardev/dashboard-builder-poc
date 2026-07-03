@@ -34,6 +34,19 @@ export class DashboardController {
     }
   }
 
+  // static async updateLayout(req: Request, res: Response) {
+  //   try {
+  //     const id = req.params["id"] as string;
+  //     const { layouts } = req.body;
+  //     if (!id) return res.status(400).json({ message: "Dashboard ID is required" });
+  //     const dashboard = await DashboardService.updateLayout(id, layouts);
+  //     if (!dashboard) return res.status(404).json({ message: "Dashboard not found" });
+  //     res.json(dashboard);
+  //   } catch (error) {
+  //     res.status(500).json(error);
+  //   }
+  // }
+
   static async update(req: Request, res: Response) {
     try {
       const id = req.params["id"] as string;
@@ -51,15 +64,87 @@ export class DashboardController {
   }
 
   static async updateLayout(req: Request, res: Response) {
+    // console.log(req.body);
     try {
       const id = req.params["id"] as string;
       if (!id) {
         return res.status(400).json({ message: "Dashboard ID is required" });
       }
-      const dashboard = await DashboardService.updateLayout(id, req.body.layouts);
+      const dashboard = await DashboardService.updateLayout(
+        id,
+        req.body.layouts,
+      );
       if (!dashboard) {
         return res.status(404).json({ message: "Dashboard not found" });
       }
+      res.json(dashboard);
+    } catch (error) {
+      console.error("Error updating dashboard layout:", error);
+      res.status(500).json(error);
+    }
+  }
+
+  static async delete(req: Request, res: Response) {
+    try {
+      const id = req.params["id"] as string;
+      if (!id) {
+        return res.status(400).json({ message: "Dashboard ID is required" });
+      }
+      const dashboard = await DashboardService.deleteDashboard(id);
+      if (!dashboard) {
+        return res.status(404).json({ message: "Dashboard not found" });
+      }
+      res.json({ message: "Dashboard deleted successfully" });
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+
+  static async deleteWidget(req: Request, res: Response) {
+    try {
+      const dashboardId = req.params["dashboardId"] as string;
+      const widgetId = req.params["widgetId"] as string;
+
+      if (!dashboardId || !widgetId) {
+        return res
+          .status(400)
+          .json({ message: "Dashboard ID and Widget ID are required" });
+      }
+
+      const dashboard = await DashboardService.deleteWidgetFromDashboard(
+        dashboardId,
+        widgetId,
+      );
+      if (!dashboard) {
+        return res.status(404).json({ message: "Dashboard not found" });
+      }
+      res.json(dashboard);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+
+  static async addWidget(req: Request, res: Response) {
+    try {
+      const dashboardId = req.params["dashboardId"] as string;
+      const widgetData = req.body;
+
+      if (!dashboardId) {
+        return res.status(400).json({ message: "Dashboard ID is required" });
+      }
+      if (
+        !widgetData.hasOwnProperty("type") ||
+        !widgetData.hasOwnProperty("title") ||
+        !widgetData.hasOwnProperty("layout")
+      ) {
+        return res
+          .status(400)
+          .json({ message: "Widget data must have type, title and layout" });
+      }
+      const dashboard = await DashboardService.addWidgetToDashboard(
+        dashboardId,
+        widgetData,
+      );
       res.json(dashboard);
     } catch (error) {
       res.status(500).json(error);

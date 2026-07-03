@@ -26,7 +26,6 @@ export default function DashboardGrid() {
 
   const saveLayout: EventCallback = (layout) => {
     const mutable = (layout as unknown as DashboardLayout[]).map(({ i, x, y, w, h }) => ({ i, x, y, w, h }));
-    console.log("Saving layout:", mutable);
     dispatch(updateLayouts(mutable));
     if (dashboardId) {
       dashboardApi.updateLayout(dashboardId, mutable);

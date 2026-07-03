@@ -19,7 +19,7 @@ export interface DashboardWidget {
 }
 
 interface DashboardState {
-  dashboardId?: string;
+  dashboardId: string | null;
   widgets: DashboardWidget[];
   layouts: DashboardLayout[];
   columns: number;
@@ -29,6 +29,7 @@ interface DashboardState {
 }
 
 const initialState: DashboardState = {
+  dashboardId: null,
   widgets: [],
   layouts: [],
   columns: 12,
@@ -43,20 +44,20 @@ const dashboardSlice = createSlice({
   initialState,
 
   reducers: {
-    setDashboard(
-      state,
-      action: PayloadAction<{
-        dashboardId: string;
-        widgets: DashboardWidget[];
-        layouts: DashboardLayout[];
-        columns?: number;
-        rowHeight?: number;
-      }>,
-    ) {
+    setDashboard(state, action) {
+      // console.log("Payload:", action.payload);
+
+      state.dashboardId = action.payload.dashboardId;
       state.widgets = action.payload.widgets;
       state.layouts = action.payload.layouts;
-      if (action.payload.columns) state.columns = action.payload.columns;
-      if (action.payload.rowHeight) state.rowHeight = action.payload.rowHeight;
+
+      if (action.payload.columns !== undefined) {
+        state.columns = action.payload.columns;
+      }
+
+      if (action.payload.rowHeight !== undefined) {
+        state.rowHeight = action.payload.rowHeight;
+      }
     },
 
     updateLayouts(state, action: PayloadAction<DashboardLayout[]>) {
@@ -65,6 +66,7 @@ const dashboardSlice = createSlice({
 
     addWidget(state, action: PayloadAction<DashboardWidget>) {
       state.widgets.push(action.payload);
+      state.layouts.push(action.payload as unknown as DashboardLayout);
     },
 
     removeWidget(state, action: PayloadAction<string>) {

@@ -8,7 +8,7 @@ export const useDashboard = () => {
 
     queryFn: async () => {
       const res = await dashboardApi.getDashboard();
-        console.log(res.data);
+        // console.log(res.data);
       return res.data[0];
     },
   });

@@ -15,7 +15,7 @@ export class DashboardService {
   static async updateDashboard(id: string, payload: any) {
     return Dashboard.findByIdAndUpdate(id, payload, { new: true });
   }
-  
+
   static async updateLayout(id: string, layouts: any[]) {
     return Dashboard.findByIdAndUpdate(
       id,
@@ -26,5 +26,26 @@ export class DashboardService {
         new: true,
       },
     );
+  }
+
+  static async deleteDashboard(id: string) {
+    return Dashboard.findByIdAndDelete(id);
+  }
+  static async addWidgetToDashboard(dashboardId: string, widgetData: any) {
+    return Dashboard.findByIdAndUpdate(
+      dashboardId,
+      { $push: { widgets: widgetData } },
+      { new: true },
+    ).populate("widgets");
+  }
+
+
+
+  static async deleteWidgetFromDashboard(dashboardId: string, widgetId: string) {
+    return Dashboard.findByIdAndUpdate(
+      dashboardId,
+      { $pull: { widgets: { widgetId } } },
+      { new: true },
+    ).populate("widgets");
   }
 }

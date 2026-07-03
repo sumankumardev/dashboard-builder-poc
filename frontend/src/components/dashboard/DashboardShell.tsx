@@ -8,19 +8,20 @@ export default function DashboardShell() {
   const dispatch = useAppDispatch();
   const { data, isLoading, error } = useDashboard();
   const layouts = useAppSelector((state) => state.dashboard.layouts);
+ 
+ useEffect(() => {
+  if (!data) return;
 
-  useEffect(() => {
-    if (!data) return;
-    dispatch(
-      setDashboard({
-        dashboardId: data._id,
-        widgets: data.widgets,
-        layouts: data.layouts,
-        columns: data.settings?.columns,
-        rowHeight: data.settings?.rowHeight,
-      }),
-    );
-  }, [data, dispatch]);
+  const dashboardPayload = {
+    dashboardId: data._id,
+    widgets: data.widgets,
+    layouts: data.layouts,
+    columns: data.settings?.columns,
+    rowHeight: data.settings?.rowHeight,
+  };
+
+  dispatch(setDashboard(dashboardPayload));
+}, [data, dispatch]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error</div>;

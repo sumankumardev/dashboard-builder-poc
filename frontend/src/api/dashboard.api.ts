@@ -10,6 +10,7 @@ export const dashboardApi = {
     return apiClient.get("/dashboards");
   },
   updateLayout(id: string, layouts: DashboardLayout[]) {
+    // console.log("Updating dashboard layout:", { id, layouts });
     return apiClient.put(`/dashboards/${id}/layout`, {
       layouts,
     });

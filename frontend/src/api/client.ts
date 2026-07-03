@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const apiUrl = import.meta.env.VITE_API_URL;
-console.log("API URL:", apiUrl);
+//Debugger
+// console.log("API URL:", apiUrl);
 const apiClient = axios.create({
   baseURL: apiUrl,
   timeout: 5000,
@@ -9,8 +10,6 @@ const apiClient = axios.create({
     "Content-Type": "application/json",
   },
 });
-
-
 
 // Add a request interceptor to include the token in the headers
 apiClient.interceptors.request.use(
@@ -27,8 +26,6 @@ apiClient.interceptors.request.use(
     return Promise.reject(error);
   },
 );
-
-
 
 apiClient.interceptors.response.use(
   (res) => res,
