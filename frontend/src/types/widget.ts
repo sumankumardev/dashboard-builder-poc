@@ -1,7 +1,15 @@
 export type WidgetType = "bar" | "line" | "treemap" | "scatter";
 
-export interface WidgetConfig {
-  id: string;
-  type: WidgetType;
+export interface Widget {
+  _id: string;
+
+  widgetId: string;
+
   title: string;
+
+  type: WidgetType;
+
+  dataSource: string;
+
+  config: Record<string, unknown>;
 }

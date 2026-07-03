@@ -4,15 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon",
+     "seed": "tsx src/seeds/seedDashboard.ts",
+    "build": "tsc && echo \"Build completed successfully!\"",
+    "start": "node dist/src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "mongoose": "^9.7.3",
+    "ts-node": "^10.9.2",
     "zod": "^4.4.3"
   },
   "devDependencies": {
