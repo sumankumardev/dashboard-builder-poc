@@ -544,3 +544,23 @@ Technologies:
 - Express.js
 - Flutter
 - Python
+
+
+# Dashboard Builder POC
+
+## Demo Video
+
+🎥 Walkthrough Video:
+https://youtube.com/watch?v=YOUR_VIDEO_ID
+
+The video demonstrates:
+
+- Dashboard CRUD operations
+- Widget CRUD operations
+- Widget duplication
+- Drag & drop layouts
+- Widget resizing
+- Dashboard persistence
+- Responsive dashboard behavior
+- Widget registry pattern
+- Backend architecture overview
